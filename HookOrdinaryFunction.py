@@ -5,14 +5,17 @@ Created on Sun Mar 22 03:58:39 2020
 @author: Dio
 """
 
-import frida, sys
+import frida
+import sys
 
-#HOOK普通方法 (除了不指定参数类型外,跟hook Overload重载方法写法一样)
+# HOOK普通方法 (除了不指定参数类型外,跟hook Overload重载方法写法一样)
 jscode = """
 if(Java.available){
     Java.perform(function(){
         var util = Java.use("com.my.fridademo.Util");//获取到类
         util.ordinaryFunc.implementation = function(param1, param2, param3){
+            //打印堆栈
+            console.log(Java.use("android.util.Log").getStackTraceString(Java.use("java.lang.Exception").$new()));
             console.log("Hook Start...");
     		send(arguments[0]);
             send(arguments[1]);
@@ -25,11 +28,13 @@ if(Java.available){
 }
 """
 
+
 def on_message(message, data):
     if message['type'] == 'send':
         print(" {0}".format(message['payload']))
     else:
         print(message)
+
 
 # 查找USB设备并附加到目标进程
 session = frida.get_usb_device().attach('com.my.fridademo')

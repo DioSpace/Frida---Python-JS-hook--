@@ -14,7 +14,7 @@ if(Java.available){
         var Singleton = Java.use("com.my.fridademo.MySingleton");//获取到类
         var util = Singleton.getInstance();//调用单例方法初始化一个对象
         util.post.overload("java.lang.String").implementation = function(param){
-            var result = util.post(param);
+            var result = this.post(param);
             console.log("param : " + param);
             return result + " ---> hooked";
         }
