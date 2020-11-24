@@ -16,7 +16,7 @@ if (Java.available) {
                     var request = chain.request();
                     var gson = Gson.$new();
                     var request_json = gson.toJson(request);
-                    console.log("request json : " + request_json);
+                    console.log("request json : \\n" + request_json);
 
                     //返回值
                     var response = chain.proceed(request);
@@ -30,7 +30,7 @@ if (Java.available) {
                                     var source = responseBody.source();
                                     if (ContentType.indexOf("application/zip") != 0) {
                                         try {
-                                            console.log("response.body StringClass :", source.readUtf8());
+                                            console.log("response.body StringClass :\\n", source.readUtf8());
                                         } catch (error) {
                                             try {
                                                 console.log("response.body ByteString", source.readByteString().hex());
