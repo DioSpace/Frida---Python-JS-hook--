@@ -7,16 +7,11 @@ if(Java.available){
     Java.perform(function(){
         var util = Java.use("javax.crypto.Cipher");//获取到类
         util.doFinal.overload("[B").implementation = function(param) {
-            //console.log('=========== doFinal start ============');
-            //console.log('param : ' + param);
-            var param_hex_str = Bytes2HexString(param);
-
             var result = this.doFinal(param);
-            //console.log('result : ' + result);
+            var param_hex_str = Bytes2HexString(param);
             //打印byte[] 数组 转16进制 字符串
             var result_hex_str = Bytes2HexString(result);
             console.log('param_hex_str : \\n' + param_hex_str,'\\nresult_hex_str : \\n' + result_hex_str);
-            //console.log('=========== doFinal end   ============');
             return result;
         }
 
