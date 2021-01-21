@@ -9,27 +9,52 @@ if(Java.available){
         var Arrays = Java.use("java.util.Arrays");//获取java.util.Arrays类
 
         util.update.overload("[B").implementation = function(param) {
-            this.update(param);
             console.log('=========== 加密参数 update start ============');
-            var paramStr = Bytes2HexString(param);
-            console.log('paramStr : \\n' + paramStr);
-            console.log('=========== 加密参数 update end   ============');
+            var bytesStr = Arrays.toString(param);
+            var paramStr1 = bytes2HexString(param);
+            var paramStr2 = byteToString(param);
+            console.log('param bytes : \\n' + bytesStr);
+            console.log('param hex : \\n' + paramStr1);
+            console.log('param utf : \\n' + paramStr2);
+            
+            this.update(param);
         }
-
 
         util.digest.overload().implementation = function() {
             var result = this.digest();
             console.log('=========== 加密结果 digest start ============');
-            //打印byte[] 数组的二进制
+            //返回值转hex 字符串
             var bytesStr = Bytes2HexString(result);
             console.log('result bytesStr : \\n' + bytesStr);
-            console.log('=========== 加密结果 digest end   ============');
             return result;
         }
 
+        //byte[]数组转字符串
+        function byteToString(arr){  
+            if(typeof arr === 'string'){  
+                return arr;  
+            }  
+            var str='',  
+            _arr = arr;  
+            for(var i=0; i<_arr.length; i++) {  
+                var one =_arr[i].toString(2), v=one.match(/^1+?(?=0)/);  
+                if(v && one.length == 8){  
+                    var bytesLength = v[0].length;  
+                    var store = _arr[i].toString(2).slice(7 - bytesLength);  
+                    for(var st=1; st < bytesLength; st++) {  
+                        store+=_arr[st + i].toString(2).slice(2);  
+                    }  
+                    str+=String.fromCharCode(parseInt(store, 2));  
+                    i+=bytesLength-1;  
+                } else {  
+                    str+=String.fromCharCode(_arr[i]);  
+                }  
+            }  
+            return str;  
+        }
 
         //字节数组转十六进制字符串，对负值填坑
-        function Bytes2HexString(arrBytes) {
+        function bytes2HexString(arrBytes) {
             var str = "";
             for (var i = 0; i < arrBytes.length; i++) {
                 var tmp;
