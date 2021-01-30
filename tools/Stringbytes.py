@@ -63,8 +63,19 @@ Java.perform(function () {
         }
         return str;
     }
-
-    //字节数组转十六进制字符串，对负值填坑
+    
+    //byte[]数组转字符串,或打印出来
+    function bytesToString2(x) {
+        if (typeof arr === 'string') {
+            return arr;
+        }
+        var arr = Java.use("java.util.Arrays");
+        var JavaString = Java.use("java.lang.String");
+        send("参数对应数组:" + arr.toString(x))
+        send("参数对应字符串:" + JavaString.$new(x))
+    }
+    
+    //byte数组转十六进制字符串，对负值填坑
     function bytes2HexString(arrBytes) {
         var str = "";
         for (var i = 0; i < arrBytes.length; i++) {
